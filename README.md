@@ -1,32 +1,27 @@
-#colorHints
-> Add already used hex colors to autocompletion to have quick access to your color palette
+#LESShints
+> Autocompletion for LESS variables
 
-When you write CSS you may use many different colors. After some time of designing you have enough colors and just want to use these colors at some point again. But then you have to search for that element with that color, copy the color, find the spot again, where you wanted to insert it, ... and maybe it was the wrong color...
-
-**That was the reason for creating colorHints!**
-
-colorHints scans your current CSS file for colors in hexadecimal notation. When you insert a '#' for inserting a color it shows you all used colors in your document.
-
-colorHints organizes your colors in two ways:
-
-1. It sorts your colors by their brightness *(dark to bright)*
-2. It shortens colors if possible *(see screenshot: #222222 becomes #222)*
+This extension for [Brackets](http://brackets.io) gives you hints for LESS variables and shows what these variables actually are.
 
 ![screenshot](screenshots/screenshot1.png)
 
+It even has fuzzy search capabilities, so you can for example do this:
+
+![screenshot](screenshots/screenshot2.png)
+
 ##How to use
 
-1. Open a *CSS*, *SCSS* or *LESS* file
+1. Open a *LESS* file
 2. Work with it
-3. Press **#** to insert a hex color
-4. **Tadaaaaaa! :D**
+3. Press **@** like you do when you want to insert a LESS variable
+4. Get a list of all variables with their values
 
 ##How to install
 There are three possible ways:
 
-1. Install the extension via the Extension Manager in Brackets: ```File -> Extension Manager -> search for 'colorHints'```
+1. Install the extension via the Extension Manager in Brackets: ```File -> Extension Manager -> search for 'LESShints'```
 2. Copy the url of this repository and paste it into ```File -> Extension Manager -> Install from URL```
-3. [Download the code](https://github.com/konstantinkobs/brackets-colorHints/archive/master.zip) and extract it to the Extensions Folder: ```Help -> Show Extension Folder -> user```
+3. [Download the code](https://github.com/konstantinkobs/brackets-LESShints/archive/master.zip) and extract it to the Extensions Folder: ```Help -> Show Extension Folder -> user```
 
 ##The MIT License (MIT)
 

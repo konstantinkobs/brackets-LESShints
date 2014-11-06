@@ -63,10 +63,13 @@ define(function (require, exports, module) {
      */
     LESSHint.prototype.hasHints = function (editor, implicitChar) {
         
+        // The editor instance
         this.editor = editor;
         
+        // Set the start position for calculating the written text later
         this.startPos = editor.getCursorPos();
         
+        // Check if the written character is the trigger
         return implicitChar ? implicitChar === this.implicitChar : false;
         
     };
@@ -79,14 +82,19 @@ define(function (require, exports, module) {
      */
     LESSHint.prototype.getHints = function(implicitChar) {
         
+        // We don't want to give hints if the cursor is out of range
         if(!this.validPosition(implicitChar)) return null;
         
+        // Get the text in the file
         var text = this.getText();
         
+        // Get all matches for the RegExp set earlier
         var matches = this.getAll(this.regex, text);
         
+        // Filter the results by everything the user wrote before
         matches = this.filterHints(matches);
         
+        // Prepare the hint arrays
         this.processHints(matches);
         
         return {
@@ -105,18 +113,19 @@ define(function (require, exports, module) {
      */
     LESSHint.prototype.insertHint = function (hint) {
         
+        // We showed the HTML array. Now we need the clean hint.
         // Get index from list
         var index = this.hintsHTML.indexOf(hint);
-        // Get Hint from index
+        // Get hint from index
         hint = this.hints[index];
         
-        // Document objects represent file contents
+        // Document instance
         var document = DocumentManager.getCurrentDocument();
         
-        // Get the position of our cursor in the document
+        // Endpoint to replace
         var pos = this.editor.getCursorPos();
         
-        // Add some text in our document
+        // Add text in our document
         document.replaceRange(hint, this.startPos, pos);
         
     };
@@ -138,9 +147,15 @@ define(function (require, exports, module) {
             return false;
         }
         
+        // Document instance
         var document = DocumentManager.getCurrentDocument();
+        // Current cursor position
         var cursorPos = this.editor.getCursorPos();
         
+        // If we navigate inside of the range with the cursor
+        // then we can save the part that was written until now
+        // Else the cursor is out of range and we don't want to give
+        // hints anymore.
         if(cursorPos.line == this.startPos.line &&
            cursorPos.ch >= this.startPos.ch){
             this.writtenSinceStart = document.getRange(this.startPos, cursorPos);
@@ -148,6 +163,7 @@ define(function (require, exports, module) {
             return false;
         }
         
+        // If nothing applied until now, we want to pass
         return true;
         
     };
@@ -159,9 +175,8 @@ define(function (require, exports, module) {
      */
     LESSHint.prototype.getText = function() {
         
-        var text = this.editor.document.getText();
-        
-        return text;
+        // Get text from editor
+        return this.editor.document.getText();
         
     };
     
@@ -173,15 +188,19 @@ define(function (require, exports, module) {
      */
     LESSHint.prototype.getAll = function(regex, text){
         
+        // We start empty
         var matches = [];
         
+        // For every match
         var match;
         while ((match = regex.exec(text)) !== null) {
             
+            // Push it to the array
             matches.push(match);
             
         }
         
+        // Return the match array
         return matches;
         
     };
@@ -194,12 +213,17 @@ define(function (require, exports, module) {
      */
     LESSHint.prototype.filterHints = function(matches){
 
+        // Split it up/convert to array for fuzzy search
         var written = this.writtenSinceStart.toLowerCase().split("");
         
+        // Filter the matches array
         matches = matches.filter(function(match){
             
+            // Get the hint
             var hint = match[1].toLowerCase();
             
+            // Check if every character of the written string
+            // is in the right order in the hint
             for(var i = 0; i < written.length; i++){
                 
                 var index = hint.indexOf(written[i]);
@@ -214,6 +238,7 @@ define(function (require, exports, module) {
             return true;
         });
         
+        // Return the filtered array
         return matches;
 
     };
@@ -225,6 +250,7 @@ define(function (require, exports, module) {
      */
     LESSHint.prototype.processHints = function(matches){
         
+        // Sort all filtered matches alphabetically
         matches = matches.sort(function(match1, match2){
             
             var var1 = match1[1].toLowerCase();
@@ -240,10 +266,13 @@ define(function (require, exports, module) {
             
         });
         
+        // Put every hint for insertion in the hints array
         this.hints = matches.map(function(match){
             return match[1];
         });
         
+        // Create the hintsHTML array which will be shown to the
+        // user. It has a preview of what the variable is set to.
         this.hintsHTML = matches.map(function(match){
             return match[1] + "<span style='color:#a0a0a0; margin-left: 10px'>" + match[2] + "</span>";
         });
