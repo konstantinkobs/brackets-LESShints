@@ -59,8 +59,6 @@ define(function (require, exports, module) {
         // Startposition of cursor
         this.startPos = null;
 
-        this.texts = [];
-
     }
 
     /**
